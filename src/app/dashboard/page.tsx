@@ -6,6 +6,7 @@ import { RootState, AppDispatch } from '../../lib/store';
 import { logout } from '../../lib/slices/authSlice';
 import Link from 'next/link';
 import AuthGuard from '../../components/AuthGuard';
+import HotelSearch from '../../components/hotel/HotelSearch';
 
 export default function Dashboard() {
   const router = useRouter();
@@ -53,34 +54,38 @@ export default function Dashboard() {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
-          <div className="border-4 border-dashed border-gray-200 rounded-lg h-96 flex items-center justify-center">
-            <div className="text-center">
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">
-                Welcome to Your Dashboard
-              </h1>
-              <p className="text-gray-600 mb-8">
-                This is your personal hotel booking dashboard.
-              </p>
-              <div className="space-y-4">
-                <div className="bg-white p-6 rounded-lg shadow">
-                  <h2 className="text-xl font-semibold mb-2">Your Bookings</h2>
-                  <p className="text-gray-600">No bookings yet. Start exploring hotels!</p>
-                </div>
-                <div className="bg-white p-6 rounded-lg shadow">
-                  <h2 className="text-xl font-semibold mb-2">Quick Actions</h2>
-                  <div className="space-x-4">
-                    <Link 
-                      href="/" 
-                      className="inline-block bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
-                    >
-                      Search Hotels
-                    </Link>
-                    <button className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700">
-                      View Profile
-                    </button>
-                  </div>
-                </div>
-              </div>
+          {/* Welcome Header */}
+          <div className="mb-8 text-center">
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">
+              Welcome to Your Dashboard
+            </h1>
+            <p className="text-xl text-gray-700">
+              Find and book your perfect hotel from our curated selection
+            </p>
+          </div>
+
+          {/* Hotel Search Component */}
+          <HotelSearch />
+
+          {/* Additional Dashboard Sections */}
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="bg-white p-6 rounded-lg shadow">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">Your Bookings</h2>
+              <p className="text-gray-700">View and manage your hotel bookings</p>
+              <Link 
+                href="/bookings" 
+                className="mt-4 inline-block bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700"
+              >
+                View Bookings
+              </Link>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">Profile Settings</h2>
+              <p className="text-gray-700">Manage your account settings and preferences</p>
+              <button className="mt-4 bg-gray-600 text-white px-6 py-2 rounded-md hover:bg-gray-700">
+                View Profile
+              </button>
             </div>
           </div>
         </div>

@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Toaster } from 'react-hot-toast';
 import ReduxProvider from '../components/providers/ReduxProvider';
 import { ApolloProvider } from '../contexts/ApolloContext';
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 interface ClientLayoutProps {
   children: React.ReactNode;
 }
@@ -31,32 +31,12 @@ const ClientLayout: React.FC<ClientLayoutProps> = ({ children }) => {
     <ApolloProvider>
       <ReduxProvider>
         {children}
-        <Toaster 
+        <ToastContainer
+          closeButton={true}
           position="top-right"
-          reverseOrder={false}
-          gutter={8}
-          containerStyle={{}}
-          toastOptions={{
-            // Define default options
-            style: {
-              background: '#363636',
-              color: '#fff',
-            },
-            success: {
-              duration: 3000,
-              iconTheme: {
-                primary: '#fff',
-                secondary: '#10b981',
-              },
-            },
-            error: {
-              duration: 4000,
-              iconTheme: {
-                primary: '#fff',
-                secondary: '#ef4444',
-              },
-            },
-          }}
+          autoClose={3000}
+          newestOnTop
+          theme="colored"
         />
       </ReduxProvider>
     </ApolloProvider>

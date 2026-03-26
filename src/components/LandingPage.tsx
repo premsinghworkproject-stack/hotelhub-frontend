@@ -5,22 +5,11 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import { RootState } from '../lib/store';
+import HotelSearch from './hotel/HotelSearch';
 
 const LandingPage = () => {
   const router = useRouter();
   const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
-  const [searchData, setSearchData] = useState({
-    location: '',
-    checkIn: '',
-    checkOut: '',
-    guests: 1
-  });
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Will implement hotel search functionality
-    console.log('Searching for hotels:', searchData);
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -72,79 +61,15 @@ const LandingPage = () => {
             Find Your Perfect
             <span className="text-indigo-600"> Stay</span>
           </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-700 mb-8 max-w-3xl mx-auto">
             Discover amazing hotels and accommodations at unbeatable prices. 
             Book your perfect getaway with confidence.
           </p>
         </div>
 
-        {/* Search Form */}
-        <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6 mt-12">
-          <form onSubmit={handleSearch} className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Location
-              </label>
-              <input
-                type="text"
-                placeholder="City, hotel, or destination"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                value={searchData.location}
-                onChange={(e) => setSearchData({ ...searchData, location: e.target.value })}
-                required
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Check In
-              </label>
-              <input
-                type="date"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                value={searchData.checkIn}
-                onChange={(e) => setSearchData({ ...searchData, checkIn: e.target.value })}
-                required
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Check Out
-              </label>
-              <input
-                type="date"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                value={searchData.checkOut}
-                onChange={(e) => setSearchData({ ...searchData, checkOut: e.target.value })}
-                required
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Guests
-              </label>
-              <select
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                value={searchData.guests}
-                onChange={(e) => setSearchData({ ...searchData, guests: parseInt(e.target.value) })}
-              >
-                {[1, 2, 3, 4, 5, 6].map(num => (
-                  <option key={num} value={num}>{num} {num === 1 ? 'Guest' : 'Guests'}</option>
-                ))}
-              </select>
-            </div>
-            
-            <div className="md:col-span-4">
-              <button
-                type="submit"
-                className="w-full bg-indigo-600 text-white py-3 px-6 rounded-md font-medium hover:bg-indigo-700 transition-colors"
-              >
-                Search Hotels
-              </button>
-            </div>
-          </form>
+        {/* Hotel Search Component - Integrated for all users */}
+        <div className="max-w-7xl mx-auto mt-12">
+          <HotelSearch />
         </div>
       </div>
 
@@ -162,7 +87,7 @@ const LandingPage = () => {
               </svg>
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-2">Best Price Guarantee</h3>
-            <p className="text-gray-600">Find a lower price? We'll match it and give you 10% off.</p>
+            <p className="text-gray-700">Find a lower price? We'll match it and give you 10% off.</p>
           </div>
           
           <div className="text-center">
@@ -172,7 +97,7 @@ const LandingPage = () => {
               </svg>
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-2">Free Cancellation</h3>
-            <p className="text-gray-600">Flexible booking options with free cancellation on most rooms.</p>
+            <p className="text-gray-700">Flexible booking options with free cancellation on most rooms.</p>
           </div>
           
           <div className="text-center">
@@ -182,7 +107,7 @@ const LandingPage = () => {
               </svg>
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-2">24/7 Support</h3>
-            <p className="text-gray-600">Our customer service team is always here to help you.</p>
+            <p className="text-gray-700">Our customer service team is always here to help you.</p>
           </div>
         </div>
       </div>

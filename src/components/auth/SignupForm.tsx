@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../lib/store';
 import { signup, clearError } from '../../lib/slices/authSlice';
-import { SignupInput } from '../../graphql/auth';
+import { SignupInput, UserType } from '../../graphql/auth';
 import { showSuccessToast, showErrorToast } from '../../lib/toast';
 
 const SignupForm = () => {
@@ -17,7 +17,8 @@ const SignupForm = () => {
   const [formData, setFormData] = useState<SignupInput>({
     name: '',
     email: '',
-    password: ''
+    password: '',
+    userType: UserType.NORMAL_USER
   });
 
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -43,7 +44,9 @@ const SignupForm = () => {
     const trimmedFormData = {
       name: formData.name.trim(),
       email: formData.email.trim(),
-      password: formData.password.trim()
+      password: formData.password.trim(),
+      userType: formData.userType,
+      ...(formData.userType === UserType.HOTEL_OWNER && { companyName: formData.companyName?.trim() })
     };
     const trimmedConfirmPassword = confirmPassword.trim();
 
@@ -83,6 +86,14 @@ const SignupForm = () => {
     if (trimmedFormData.password !== trimmedConfirmPassword) {
       showErrorToast('Passwords do not match');
       return;
+    }
+
+    // Additional validation for hotel owners
+    if (trimmedFormData.userType === UserType.HOTEL_OWNER) {
+      if (!trimmedFormData.companyName || trimmedFormData.companyName.trim().length < 2) {
+        showErrorToast('Company name must be at least 2 characters long');
+        return;
+      }
     }
 
     const result = await dispatch(signup(trimmedFormData));
@@ -151,6 +162,66 @@ const SignupForm = () => {
         
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
+            <div>
+              <label htmlFor="userType" className="block text-sm font-medium text-gray-900 mb-2">
+                I want to register as
+              </label>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => setFormData(prev => ({ ...prev, userType: UserType.NORMAL_USER }))}
+                  className={`p-3 border-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                    formData.userType === UserType.NORMAL_USER
+                      ? 'border-indigo-500 bg-indigo-50 text-indigo-700'
+                      : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                  }`}
+                >
+                  <div className="flex flex-col items-center">
+                    <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    Individual
+                  </div>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData(prev => ({ ...prev, userType: UserType.HOTEL_OWNER }))}
+                  className={`p-3 border-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                    formData.userType === UserType.HOTEL_OWNER
+                      ? 'border-indigo-500 bg-indigo-50 text-indigo-700'
+                      : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                  }`}
+                >
+                  <div className="flex flex-col items-center">
+                    <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                    Hotel Owner
+                  </div>
+                </button>
+              </div>
+            </div>
+            
+            {formData.userType === UserType.HOTEL_OWNER && (
+              <div>
+                <label htmlFor="companyName" className="block text-sm font-medium text-gray-900 mb-2">
+                  Company Name
+                </label>
+                <input
+                  id="companyName"
+                  name="companyName"
+                  type="text"
+                  required={formData.userType === UserType.HOTEL_OWNER}
+                  aria-required={formData.userType === UserType.HOTEL_OWNER}
+                  aria-describedby="companyName-error"
+                  className="mt-1 appearance-none relative block w-full px-3 py-3 border-2 border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors duration-200"
+                  placeholder="Enter your hotel company name"
+                  value={formData.companyName || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, companyName: e.target.value }))}
+                />
+              </div>
+            )}
+            
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-900 mb-2">
                 Full Name
@@ -233,7 +304,7 @@ const SignupForm = () => {
           <div>
             <button
               type="submit"
-              disabled={isLoading || !formData.name.trim() || !formData.email.trim() || !formData.password.trim() || !confirmPassword.trim() || formData.password.trim().length < 6}
+              disabled={isLoading || !formData.name.trim() || !formData.email.trim() || !formData.password.trim() || !confirmPassword.trim() || formData.password.trim().length < 6 || (formData.userType === UserType.HOTEL_OWNER && (!formData.companyName?.trim() || formData.companyName.trim().length < 2))}
               className="group relative w-full flex justify-center py-3 px-4 border-2 border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
               aria-label="Create Account"
             >

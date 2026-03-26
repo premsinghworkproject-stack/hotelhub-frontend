@@ -18,7 +18,8 @@ import {
   LoginResponse,
   OTPResponse,
   ForgotPasswordResponse,
-  VerifyForgotPasswordOTPResponse
+  VerifyForgotPasswordOTPResponse,
+  UserType
 } from '../../graphql/auth';
 import { client } from '../apollo-client';
 
@@ -63,7 +64,9 @@ export const signup = createAsyncThunk(
       const trimmedInput: SignupInput = {
         name: input.name?.trim() || '',
         email: input.email?.trim() || '',
-        password: input.password?.trim() || ''
+        password: input.password?.trim() || '',
+        userType: input.userType,
+        ...(input.userType === UserType.HOTEL_OWNER && { companyName: input.companyName?.trim() || '' })
       };
       
       const response = await client.mutate<{ signup: AuthResponse }>({

@@ -25,69 +25,28 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Toast close button styling - more reliable selectors */
-.Toastify__toast-container button[aria-label*="close"],
-.Toastify__toast button[aria-label*="Close"],
-.Toastify__close-button,
-[data-testid="toast"] button[aria-label="Close toast"],
-button[aria-label="Close toast"] {
-  opacity: 1 !important;
-  background: transparent !important;
-  border: none !important;
-  color: #ffffff !important;
-  font-size: 18px !important;
-  cursor: pointer !important;
-  padding: 4px !important;
-  border-radius: 4px !important;
-  transition: all 0.2s ease !important;
-  position: absolute !important;
-  right: 8px !important;
-  top: 50% !important;
-  transform: translateY(-50%) !important;
-  z-index: 10 !important;
-  display: block !important;
-  visibility: visible !important;
-  pointer-events: auto !important;
-}
-
-.Toastify__toast-container button[aria-label*="close"]:hover,
-.Toastify__toast button[aria-label*="Close"]:hover,
-.Toastify__close-button:hover,
-[data-testid="toast"] button[aria-label="Close toast"]:hover,
-button[aria-label="Close toast"]:hover {
-  background: rgba(255, 255, 255, 0.2) !important;
-  opacity: 0.8 !important;
-}
-
-.Toastify__toast-container button[aria-label*="close"]:focus,
-.Toastify__toast button[aria-label*="Close"]:focus,
-.Toastify__close-button:focus,
-[data-testid="toast"] button[aria-label="Close toast"]:focus,
-button[aria-label="Close toast"]:focus {
-  outline: 2px solid rgba(255, 255, 255, 0.5) !important;
-  outline-offset: 2px !important;
-}
-
 /* Ensure toast container has proper z-index */
 .Toastify__toast-container,
 [data-testid="toast-container"] {
   z-index: 9999 !important;
 }
 
-/* Toast positioning fixes */
+/* Toast positioning and text styling */
 .Toastify__toast,
 [data-testid="toast"] {
   position: relative !important;
-  padding-right: 40px !important;
+  padding-right: 35px !important; /* Adjusted for smaller toast */
+  font-size: 13px !important; /* Match baseStyle */
+  border-radius: 6px !important; /* Match baseStyle */
 }
 
-/* Add close button click handler via CSS */
-.Toastify__toast-container button[aria-label*="close"]::after,
-.Toastify__toast button[aria-label*="Close"]::after,
-.Toastify__close-button::after,
-[data-testid="toast"] button[aria-label="Close toast"]::after,
-button[aria-label="Close toast"]::after {
-  content: "×" !important;
-  font-size: 20px !important;
-  font-weight: bold !important;
+/* Custom close button positioning */
+.Toastify__toast-container button[aria-label*="close"],
+.Toastify__toast button[aria-label*="Close"],
+.Toastify__close-button,
+[data-testid="toast"] button[aria-label="Close toast"],
+button[aria-label="Close toast"] {
+  top: 50% !important; /* Move down from top corner */
+  right: 14px !important; /* Move in from right edge */
+  transform: translateY(-50%) translateY(-8px) !important; /* Adjust for new positioning */
 }

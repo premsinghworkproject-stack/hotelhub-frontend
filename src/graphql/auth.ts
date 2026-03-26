@@ -72,11 +72,20 @@ export const RESET_PASSWORD_MUTATION = gql`
   }
 `;
 
+// UserType enum matching backend
+export enum UserType {
+  NORMAL_USER = 'NORMAL_USER',
+  HOTEL_OWNER = 'HOTEL_OWNER',
+  ADMIN = 'ADMIN'
+}
+
 // TypeScript types based on backend documentation
 export interface SignupInput {
   name: string;
   email: string;
   password: string;
+  userType: UserType;
+  companyName?: string;
 }
 
 export interface LoginInput {

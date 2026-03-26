@@ -1,100 +1,56 @@
-import toast from 'react-hot-toast';
+import { toast, Id, ToastOptions } from 'react-toastify';
+import { ToastPosition } from 'react-toastify';
 
+// Common styles
+const baseStyle = {
+  position: 'top-right' as ToastPosition,
+  style: {
+    fontSize: '13px', // Slightly smaller but readable
+    fontWeight: '500',
+    borderRadius: '6px', // Smaller border radius
+    padding: '10px 35px 10px 14px', // More compact padding
+    minWidth: '200px', // Smaller min width
+    maxWidth: '350px', // Smaller max width
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+  },
+  closeButton: true, // Enable close button for positioning
+};
+
+// SUCCESS
 export const showSuccessToast = (message: string) => {
-  const toastId = toast.success(message, {
-    duration: 3000,
-    position: 'top-right',
-    style: {
-      background: '#10b981',
-      color: '#ffffff',
-      fontSize: '14px',
-      fontWeight: '500',
-      borderRadius: '8px',
-      padding: '12px 40px 12px 16px', // Extra padding for close button
-      minWidth: '250px',
-      maxWidth: '400px',
-      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-    },
-    iconTheme: {
-      primary: '#ffffff',
-      secondary: '#10b981',
-    },
-    ariaProps: {
-      role: 'alert',
-      'aria-live': 'polite',
-    },
-  });
-  
-  // Return an object with dismiss functionality
-  return {
-    id: toastId,
-    dismiss: () => dismissToast(toastId)
-  };
+  toast.success(message, baseStyle);
 };
 
+// ERROR
 export const showErrorToast = (message: string) => {
-  const toastId = toast.error(message, {
-    duration: 4000,
-    position: 'top-right',
-    style: {
-      background: '#ef4444',
-      color: '#ffffff',
-      fontSize: '14px',
-      fontWeight: '500',
-      borderRadius: '8px',
-      padding: '12px 40px 12px 16px', // Extra padding for close button
-      minWidth: '250px',
-      maxWidth: '400px',
-      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-    },
-    iconTheme: {
-      primary: '#ffffff',
-      secondary: '#ef4444',
-    },
-    ariaProps: {
-      role: 'alert',
-      'aria-live': 'polite',
-    },
+  toast.error(message, {
+    ...baseStyle,
+    autoClose: 4000,
   });
-  
-  // Return an object with dismiss functionality
-  return {
-    id: toastId,
-    dismiss: () => dismissToast(toastId)
-  };
 };
 
+// LOADING
 export const showLoadingToast = (message: string) => {
-  const toastId = toast.loading(message, {
-    position: 'top-right',
-    style: {
-      background: '#3b82f6',
-      color: '#ffffff',
-      fontSize: '14px',
-      fontWeight: '500',
-      borderRadius: '8px',
-      padding: '12px 40px 12px 16px', // Extra padding for close button
-      minWidth: '250px',
-      maxWidth: '400px',
-      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-    },
-    iconTheme: {
-      primary: '#ffffff',
-      secondary: '#3b82f6',
-    },
-    ariaProps: {
-      role: 'status',
-      'aria-live': 'polite',
-    },
+  const toastId: Id = toast.loading(message, {
+    ...baseStyle,
+    autoClose: false, // loading should not auto close
   });
-  
-  // Return an object with dismiss functionality
+
   return {
     id: toastId,
-    dismiss: () => dismissToast(toastId)
+    success: (msg: string) =>
+      toast.update(toastId, {
+        render: msg,
+        type: 'success',
+        isLoading: false,
+        autoClose: 3000,
+      }),
+    error: (msg: string) =>
+      toast.update(toastId, {
+        render: msg,
+        type: 'error',
+        isLoading: false,
+        autoClose: 4000,
+      }),
   };
-};
-
-export const dismissToast = (toastId: string) => {
-  toast.dismiss(toastId);
 };
