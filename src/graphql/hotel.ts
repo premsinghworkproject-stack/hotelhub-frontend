@@ -148,6 +148,12 @@ export const SEARCH_NEARBY_QUERY = gql`
   }
 `;
 
+export const ADVANCED_HOTEL_AUTOCOMPLETE_QUERY = gql`
+  query AdvancedHotelAutocomplete($query: String!) {
+    advancedHotelAutocomplete(query: $query)
+  }
+`;
+
 // TypeScript interfaces
 export interface Hotel {
   id: number;
@@ -225,6 +231,10 @@ export interface HotelCountResponse {
 
 export interface SearchNearbyResponse {
   searchNearby: Hotel[];
+}
+
+export interface AdvancedHotelAutocompleteResponse {
+  advancedHotelAutocomplete: string[];
 }
 
 // Pagination helper interface

@@ -17,6 +17,7 @@ import {
   PropertyType
 } from '../../graphql/hotel';
 import { showSuccessToast, showErrorToast } from '../../lib/toast';
+import HotelAutocomplete from './HotelAutocomplete';
 
 const HotelSearch = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -155,12 +156,10 @@ const HotelSearch = () => {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Search (Name, Description, City, State, Country)
             </label>
-            <input
-              type="text"
+            <HotelAutocomplete
               value={localFilters.searchQuery || ''}
-              onChange={(e) => handleFilterChange('searchQuery', e.target.value)}
+              onChange={(value) => handleFilterChange('searchQuery', value)}
               placeholder="Search hotels by name, description, or location..."
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-500"
             />
           </div>
 
