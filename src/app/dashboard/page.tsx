@@ -7,16 +7,39 @@ import { logout } from '../../lib/slices/authSlice';
 import Link from 'next/link';
 import AuthGuard from '../../components/AuthGuard';
 import HotelSearch from '../../components/hotel/HotelSearch';
+import { UserType } from '../../graphql/auth';
+import { useEffect } from 'react';
 
 export default function Dashboard() {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth);
 
+  // Redirect hotel owners to their dedicated dashboard
+  useEffect(() => {
+    if (user?.userType === UserType.HOTEL_OWNER) {
+      router.replace('/hotel-owner');
+    }
+  }, [user, router]);
+
   const handleLogout = () => {
     dispatch(logout());
     router.push('/');
   };
+
+  // Show loading or redirect message for hotel owners
+  if (user?.userType === UserType.HOTEL_OWNER) {
+    return (
+      <AuthGuard requireAuth={true}>
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <div className="text-center">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+            <p className="mt-4 text-gray-600">Redirecting to Hotel Owner Dashboard...</p>
+          </div>
+        </div>
+      </AuthGuard>
+    );
+  }
 
   return (
     <AuthGuard requireAuth={true}>

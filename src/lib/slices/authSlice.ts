@@ -28,6 +28,8 @@ interface AuthState {
     id?: string;
     name?: string;
     email?: string;
+    userType?: string;
+    companyName?: string;
   } | null;
   token: string | null;
   isAuthenticated: boolean;
@@ -285,6 +287,13 @@ const authSlice = createSlice({
         if (action.payload.token) {
           state.token = action.payload.token;
           state.isAuthenticated = true;
+          state.user = {
+            id: action.payload.user?.id,
+            name: action.payload.user?.name,
+            email: action.payload.user?.email,
+            userType: action.payload.user?.userType,
+            companyName: action.payload.user?.companyName
+          };
         }
       })
       .addCase(signup.rejected, (state, action) => {
@@ -303,6 +312,13 @@ const authSlice = createSlice({
         if (action.payload.token) {
           state.token = action.payload.token;
           state.isAuthenticated = true;
+          state.user = {
+            id: action.payload.user?.id,
+            name: action.payload.user?.name,
+            email: action.payload.user?.email,
+            userType: action.payload.user?.userType,
+            companyName: action.payload.user?.companyName
+          };
           state.requiresOTP = false;
           state.otpEmail = null;
         } else if ((action.payload as any).requiresOTP) {
@@ -326,6 +342,13 @@ const authSlice = createSlice({
         if (action.payload.token) {
           state.token = action.payload.token;
           state.isAuthenticated = true;
+          state.user = {
+            id: action.payload.user?.id,
+            name: action.payload.user?.name,
+            email: action.payload.user?.email,
+            userType: action.payload.user?.userType,
+            companyName: action.payload.user?.companyName
+          };
           state.requiresOTP = false;
           state.otpEmail = null;
         }

@@ -154,6 +154,181 @@ export const ADVANCED_HOTEL_AUTOCOMPLETE_QUERY = gql`
   }
 `;
 
+// Hotel Management Mutations for Hotel Owners
+export const CREATE_HOTEL_WITH_URLS_MUTATION = gql`
+  mutation CreateHotelWithUrls($input: CreateHotelWithUrlsInput!) {
+    createHotelWithUrls(input: $input) {
+      id
+      name
+      description
+      address
+      city
+      state
+      country
+      postalCode
+      latitude
+      longitude
+      phone
+      email
+      website
+      rating
+      totalReviews
+      isActive
+      isVerified
+      mealPlan
+      propertyType
+      checkInTime
+      checkOutTime
+      cancellationPolicy
+      petPolicy
+      parkingInfo
+      ownerId
+      createdAt
+      updatedAt
+      images {
+        id
+        url
+        altText
+        caption
+        isPrimary
+        sortOrder
+      }
+    }
+  }
+`;
+
+export const UPDATE_HOTEL_WITH_URLS_MUTATION = gql`
+  mutation UpdateHotelWithUrls($id: Int!, $input: UpdateHotelWithUrlsInput!) {
+    updateHotelWithUrls(id: $id, input: $input) {
+      id
+      name
+      description
+      address
+      city
+      state
+      country
+      postalCode
+      latitude
+      longitude
+      phone
+      email
+      website
+      rating
+      totalReviews
+      isActive
+      isVerified
+      mealPlan
+      propertyType
+      checkInTime
+      checkOutTime
+      cancellationPolicy
+      petPolicy
+      parkingInfo
+      ownerId
+      createdAt
+      updatedAt
+      images {
+        id
+        url
+        altText
+        caption
+        isPrimary
+        sortOrder
+      }
+    }
+  }
+`;
+
+export const GET_HOTELS_BY_OWNER_QUERY = gql`
+  query GetHotelsByOwner($limit: Int, $offset: Int) {
+    hotelsByOwner(limit: $limit, offset: $offset) {
+      id
+      name
+      description
+      address
+      city
+      state
+      country
+      postalCode
+      latitude
+      longitude
+      phone
+      email
+      website
+      rating
+      totalReviews
+      isActive
+      isVerified
+      mealPlan
+      propertyType
+      checkInTime
+      checkOutTime
+      cancellationPolicy
+      petPolicy
+      parkingInfo
+      ownerId
+      createdAt
+      updatedAt
+      images {
+        id
+        url
+        altText
+        caption
+        isPrimary
+        sortOrder
+      }
+      roomTypes {
+        id
+        name
+        description
+        basePrice
+        maxOccupancy
+        roomCount
+        isActive
+      }
+    }
+  }
+`;
+
+export const TOGGLE_HOTEL_ACTIVE_STATUS_MUTATION = gql`
+  mutation ToggleHotelActiveStatus($id: Int!, $isActive: Boolean!, $ownerId: Int!) {
+    toggleHotelActiveStatus(id: $id, isActive: $isActive, ownerId: $ownerId) {
+      id
+      name
+      isActive
+      updatedAt
+    }
+  }
+`;
+
+export const DELETE_HOTEL_MUTATION = gql`
+  mutation DeleteHotel($id: Int!, $ownerId: Int!) {
+    deleteHotel(id: $id, ownerId: $ownerId) {
+      success
+      message
+    }
+  }
+`;
+
+// File Upload Mutations
+export const UPLOAD_HOTEL_IMAGES_MUTATION = gql`
+  mutation UploadHotelImages($files: [Upload!]!) {
+    uploadHotelImages(files: $files)
+  }
+`;
+
+export const UPLOAD_MULTIPLE_FILES_MUTATION = gql`
+  mutation UploadMultipleFiles($files: [Upload!]!) {
+    uploadMultipleFiles(files: $files)
+  }
+`;
+
+export const UPLOAD_FILE_MUTATION = gql`
+  mutation UploadFile($file: Upload!) {
+    uploadFile(file: $file)
+  }
+`;
+
 // TypeScript interfaces
 export interface Hotel {
   id: number;
@@ -169,6 +344,10 @@ export interface Hotel {
   email?: string;
   website?: string;
   description?: string;
+  rating?: number;
+  totalReviews?: number;
+  isActive: boolean;
+  isVerified: boolean;
   mealPlan?: MealPlan;
   propertyType?: PropertyType;
   checkInTime?: string;
@@ -176,10 +355,118 @@ export interface Hotel {
   cancellationPolicy?: string;
   petPolicy?: string;
   parkingInfo?: string;
-  isActive: boolean;
-  isVerified: boolean;
+  ownerId?: number;
   createdAt: string;
   updatedAt: string;
+  images?: HotelImage[];
+  roomTypes?: RoomType[];
+}
+
+export interface HotelImage {
+  id: number;
+  url: string;
+  altText?: string;
+  caption?: string;
+  isPrimary: boolean;
+  sortOrder: number;
+}
+
+export interface RoomType {
+  id: number;
+  name: string;
+  description?: string;
+  basePrice?: number;
+  maxOccupancy?: number;
+  roomCount?: number;
+  isActive?: boolean;
+}
+
+// Hotel Creation and Update Interfaces
+export interface CreateHotelWithUrlsInput {
+  name: string;
+  description: string;
+  address: string;
+  city: string;
+  state: string;
+  country: string;
+  postalCode: string;
+  latitude?: number;
+  longitude?: number;
+  phone?: string;
+  email?: string;
+  website?: string;
+  rating?: number;
+  totalRooms?: number;
+  checkInTime?: string;
+  checkOutTime?: string;
+  hasParking?: boolean;
+  hasWiFi?: boolean;
+  hasPool?: boolean;
+  hasGym?: boolean;
+  hasSpa?: boolean;
+  hasRestaurant?: boolean;
+  hasBar?: boolean;
+  hasRoomService?: boolean;
+  hasMeetingRooms?: boolean;
+  hasBusinessCenter?: boolean;
+  hasPetFriendly?: boolean;
+  hasAirportShuttle?: boolean;
+  hasConcierge?: boolean;
+  has24HourFrontDesk?: boolean;
+  hasAirConditioning?: boolean;
+  hasHeating?: boolean;
+  hasElevator?: boolean;
+  hasDisabledAccess?: boolean;
+  images?: MultipleImageUrlInput;
+}
+
+export interface UpdateHotelWithUrlsInput {
+  name?: string;
+  description?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  postalCode?: string;
+  phone?: string;
+  email?: string;
+  website?: string;
+  rating?: number;
+  totalRooms?: number;
+  checkInTime?: string;
+  checkOutTime?: string;
+  hasParking?: boolean;
+  hasWiFi?: boolean;
+  hasPool?: boolean;
+  hasGym?: boolean;
+  hasSpa?: boolean;
+  hasRestaurant?: boolean;
+  hasBar?: boolean;
+  hasRoomService?: boolean;
+  hasMeetingRooms?: boolean;
+  hasBusinessCenter?: boolean;
+  hasPetFriendly?: boolean;
+  hasAirportShuttle?: boolean;
+  hasConcierge?: boolean;
+  has24HourFrontDesk?: boolean;
+  hasAirConditioning?: boolean;
+  hasHeating?: boolean;
+  hasElevator?: boolean;
+  hasDisabledAccess?: boolean;
+  newImages?: MultipleImageUrlInput;
+  deleteImageIds?: number[];
+}
+
+export interface ImageUrlInput {
+  url: string;
+  altText?: string;
+  caption?: string;
+  isPrimary?: boolean;
+  sortOrder?: number;
+}
+
+export interface MultipleImageUrlInput {
+  images?: ImageUrlInput[];
 }
 
 export interface SearchHotelsInput {
@@ -235,6 +522,30 @@ export interface SearchNearbyResponse {
 
 export interface AdvancedHotelAutocompleteResponse {
   advancedHotelAutocomplete: string[];
+}
+
+// Hotel Management Response Interfaces
+export interface CreateHotelResponse {
+  createHotelWithUrls: Hotel;
+}
+
+export interface UpdateHotelResponse {
+  updateHotelWithUrls: Hotel;
+}
+
+export interface HotelsByOwnerResponse {
+  hotelsByOwner: Hotel[];
+}
+
+export interface ToggleHotelStatusResponse {
+  toggleHotelActiveStatus: Hotel;
+}
+
+export interface DeleteHotelResponse {
+  deleteHotel: {
+    success: boolean;
+    message: string;
+  };
 }
 
 // Pagination helper interface

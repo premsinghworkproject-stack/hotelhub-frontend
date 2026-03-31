@@ -7,6 +7,13 @@ export const SIGNUP_MUTATION = gql`
       success
       token
       message
+      user {
+        id
+        name
+        email
+        userType
+        companyName
+      }
     }
   }
 `;
@@ -18,6 +25,13 @@ export const LOGIN_MUTATION = gql`
       token
       message
       requiresOTP
+      user {
+        id
+        name
+        email
+        userType
+        companyName
+      }
     }
   }
 `;
@@ -28,6 +42,13 @@ export const COMPLETE_OTP_VERIFICATION_MUTATION = gql`
       success
       token
       message
+      user {
+        id
+        name
+        email
+        userType
+        companyName
+      }
     }
   }
 `;
@@ -121,6 +142,13 @@ export interface AuthResponse {
   success: boolean;
   token?: string;
   message?: string;
+  user?: {
+    id: string;
+    name: string;
+    email: string;
+    userType: UserType;
+    companyName?: string;
+  };
 }
 
 export interface LoginResponse {
@@ -128,6 +156,13 @@ export interface LoginResponse {
   token?: string;
   message?: string;
   requiresOTP?: boolean;
+  user?: {
+    id: string;
+    name: string;
+    email: string;
+    userType: UserType;
+    companyName?: string;
+  };
 }
 
 export interface OTPResponse {
